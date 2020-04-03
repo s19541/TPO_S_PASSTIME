@@ -29,10 +29,10 @@ public class Time {
                 LocalDateTime dateFrom = LocalDateTime.parse(from);
                 LocalDateTime dateTo = LocalDateTime.parse(to);
                 retString+="Od "+dateFrom.format( DateTimeFormatter.ofPattern(tpatt))+" do "+dateTo.format( DateTimeFormatter.ofPattern(tpatt))+"\n";
-                retString+="- mija: "+ ChronoUnit.DAYS.between(dateFrom,dateTo)+" "+(ChronoUnit.DAYS.between(dateFrom,dateTo)!=1?"dni":"dzień")+", tygodni "+Math.round(ChronoUnit.DAYS.between(dateFrom,dateTo)/7.0*100)/100.0+"\n";
                 ZonedDateTime zdt1 = ZonedDateTime.of(dateFrom, ZoneId.of("Europe/Warsaw"));
                 ZonedDateTime zdt2 = ZonedDateTime.of(dateTo, ZoneId.of("Europe/Warsaw"));
-                retString+="- godzin: "+ChronoUnit.HOURS.between(zdt1, zdt2)+", minut: "+ChronoUnit.MINUTES.between(zdt1, zdt2);
+                retString+="- mija: "+ Math.round(ChronoUnit.HOURS.between(zdt1,zdt2)/24.0)+" "+(Math.round(ChronoUnit.HOURS.between(zdt1,zdt2)/24.0)!=1?"dni":"dzień")+", tygodni "+Math.round(Math.round(ChronoUnit.HOURS.between(zdt1,zdt2)/24.0)/7.0*100)/100.0+"\n";
+                retString+="- godzin: "+ChronoUnit.HOURS.between(zdt1, zdt2)+", minut: "+ChronoUnit.MINUTES.between(zdt1, zdt2)+"\n";
                 retString+=getDaysCalender(dateFrom.toLocalDate(),dateTo.toLocalDate());
             }
         }catch(Exception e){
@@ -49,7 +49,7 @@ public class Time {
             Period p = Period.between(dateFrom,dateTo);
             if(p.getYears()==1)
                 years="1 rok";
-            else if(p.getYears()<5)
+            else if(p.getYears()<5&&p.getYears()>1)
                 years=p.getYears()+" lata";
             else if(p.getYears()>=5)
                 years=p.getYears()+" lat";
@@ -57,7 +57,7 @@ public class Time {
                 months+=", ";
             if(p.getMonths()==1)
                 months+="1 miesiąc";
-            else if(p.getMonths()<=4)
+            else if(p.getMonths()<5&&p.getMonths()>1)
                 months+=p.getMonths()+" miesiące";
             else if(p.getMonths()>4)
                 months+=p.getMonths()+" miesiecy";
